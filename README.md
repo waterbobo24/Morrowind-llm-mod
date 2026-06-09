@@ -65,43 +65,47 @@ All generated content has been reviewed, tested, and curated by a human maintain
 
 ---
 
-## 🚀 Installation
+## 🚀 Installation & Running
 
-### 1. Mod (this repo)
-Install using an OpenMW mod manager (e.g., **Amethyst Mod Manager**) or extract manually to your `mods/` folder.
+You need **two** .NET processes running simultaneously: the **Server** (handles LLM APIs, memory, and voice) and the **Client Console** (bridges OpenMW ↔ Server).
 
-Key paths:
-- `scripts/` — Core Lua logic
-- `Sound/` — Cached voice lines
-- `l10n/` — Localization strings
-- `zdorpgai.omwscripts` — Main OpenMW script entrypoint
-
-### 2. Server
-Clone and run the [server](https://github.com/waterbobo24/Morrowind-llm-server-client):
+### 1. Clone and enter the repo
 
 ```bash
 git clone https://github.com/waterbobo24/Morrowind-llm-server-client.git
 cd Morrowind-llm-server-client
-# See server README for `dotnet run` instructions
 
-The server requires API credentials:
+2. Configure credentials
 
-    Copy the example config:
+cp example/server-config.example.yaml .tmp/server-config.yaml
+# Edit .tmp/server-config.yaml with your API keys
 
-    cp example/server-config.example.yaml .tmp/server-config.yaml
+3. Terminal 1 — Start the Server
 
-    Edit .tmp/server-config.yaml and add your LLM API key (OpenAI, Anthropic, or Gemini).
-    Optional: add ElevenLabs key for cloud NPC voice output, or enable Pocket TTS for offline voice.
-    Optional: add Deepgram key for speech-to-text.
+dotnet run --project src/ZdoRpgAi.Server
 
-    Note: .tmp/server-config.yaml is gitignored so your keys never leave your machine.
+4. Terminal 2 — Start the Client
 
-⚙️ Quick Start
+dotnet run --project src/ZdoRpgAi.Client.Console -- --config .tmp/client-config.yaml
 
-    Start the server (dotnet run in the server src/ZdoRpgAi.Server project).
-    Launch OpenMW with this mod enabled.
-    Approach any NPC and talk (push-to-talk or text input depending on your client config).
+    Tip — Background the client in one terminal:
 
+    nohup dotnet run --project src/ZdoRpgAi.Client.Console -- --config .tmp/client-config.yaml > /tmp/client.log 2>&1 &
+    sleep 2
+
+
+---
+
+
+
+```markdown
+## ⚙️ Quick Start
+
+1. Start the **Server** (`dotnet run --project src/ZdoRpgAi.Server` in the server repo).
+2. Start the **Client** (`dotnet run --project src/ZdoRpgAi.Client.Console -- --config .tmp/client-config.yaml`).
+   - Or background it: `nohup dotnet run ... > /tmp/client.log 2>&1 &`
+3. Launch **OpenMW** with this mod enabled.
+4. Approach any NPC and talk (push-to-talk or text input via Zenity).
 📸 Screenshot
 
 In-game screenshot
