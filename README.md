@@ -1,4 +1,4 @@
-# Zdo RPG AI
+content = """# Morrowind LLM Mod
 
 **Voice- and text-driven AI NPCs for OpenMW.**  
 This mod connects Morrowind to a local LLM server, giving every NPC persistent memory, dynamic personality, and contextual awareness.
