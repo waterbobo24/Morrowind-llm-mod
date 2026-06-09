@@ -76,31 +76,52 @@ Key paths:
 - `l10n/` — Localization strings
 - `zdorpgai.omwscripts` — Main OpenMW script entrypoint
 
-### 2. Server
-Clone and run the [server](https://github.com/waterbobo24/Morrowind-llm-server-client) then do the same for the client:
+### 2. Server & Client
+Clone and run the [server/client repo](https://github.com/waterbobo24/Morrowind-llm-server-client):
 
 ```bash
 git clone https://github.com/waterbobo24/Morrowind-llm-server-client.git
 cd Morrowind-llm-server-client
-# See server README for `dotnet run` instructions
 
-The server requires API credentials:
+You need two configuration files and two running processes:
 
-    Copy the example config:
+Server configuration:
 
-    cp example/server-config.example.yaml .tmp/server-config.yaml
+cp example/server-config.example.yaml .tmp/server-config.yaml
+# Edit .tmp/server-config.yaml and add your LLM API key (OpenAI, Anthropic, or Gemini).
+# Optional: add ElevenLabs key for cloud voice, enable Pocket TTS for offline voice.
+# Optional: add Deepgram key for speech-to-text.
 
-    Edit .tmp/server-config.yaml and add your LLM API key (OpenAI, Anthropic, or Gemini).
-    Optional: add ElevenLabs key for cloud NPC voice output, or enable Pocket TTS for offline voice.
-    Optional: add Deepgram key for speech-to-text.
+Client configuration:
 
-    Note: .tmp/server-config.yaml is gitignored so your keys never leave your machine.
+cp example/client-config.example.yaml .tmp/client-config.yaml
+# Edit .tmp/client-config.yaml (set server URL, input mode, push-to-talk key, etc.)
+
+    Note: .tmp/ is gitignored so your API keys and local settings never leave your machine.
+
+3. Run both processes
+
+Terminal 1 — Start the Server:
+
+dotnet run --project src/ZdoRpgAi.Server
+
+Terminal 2 — Start the Client:
+
+dotnet run --project src/ZdoRpgAi.Client.Console -- --config .tmp/client-config.yaml
+
+    Tip — Run both in the background from one terminal:
+
+    cd /path/to/Morrowind-llm-server-client
+    nohup dotnet run --project src/ZdoRpgAi.Client.Console -- --config .tmp/client-config.yaml > /tmp/client.log 2>&1 &
+    sleep 2
 
 ⚙️ Quick Start
 
-    Start the server (dotnet run in the server src/ZdoRpgAi.Server project).
+    Start the Server (dotnet run --project src/ZdoRpgAi.Server).
+    Start the Client (dotnet run --project src/ZdoRpgAi.Client.Console -- --config .tmp/client-config.yaml).
     Launch OpenMW with this mod enabled.
-    Approach any NPC and talk (push-to-talk or text input depending on your client config).
+    Approach any NPC and talk (push-to-talk or text input via Zenity).
+
 
 
 📸 Screenshot
